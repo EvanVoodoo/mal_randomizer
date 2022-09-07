@@ -1,7 +1,55 @@
 import "package:flutter/material.dart";
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MalPicker());
+}
+
+class AnimeList {
+  List<Anime> list = [];
+  int userId = -1;
+
+  AnimeList.list({
+    required this.list,
+  });
+
+  AnimeList.userList({
+    required this.list,
+    required this.userId,
+  });
+
+  AnimeList.fromJson(Map<String, dynamic> json) {
+    json.forEach((key, value) {
+      Node node = Node(anime: value);
+      list.add(node.toAnime(node.anime));
+    });
+  }
+}
+
+class Node {
+  final Map<String, dynamic> anime;
+
+  Node({
+    required this.anime,
+  });
+
+  Anime toAnime(anime) {
+    return Anime(
+      id: anime["id"],
+      title: anime["title"],
+    );
+  }
+}
+
+class Anime {
+  final int id;
+  final String title;
+
+  Anime({
+    required this.id,
+    required this.title,
+  });
 }
 
 List<Color> colorPalette = <Color>[
@@ -42,6 +90,24 @@ class _HomepageState extends State<Homepage> {
     const Tab(text: "RIGHT"),
   ];
 
+  // TODO: Learn how to implement endpoints
+  Future<AnimeList> fetchAnimeList() async {
+    final response = await http.get(
+      Uri.parse('https://api.myanimelist.net/v2/anime?q=undead&fields=id,title,main_picture,genres'),
+      headers: <String, String>{'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return AnimeList.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load anime list: ' + response.statusCode.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -64,9 +130,19 @@ class _HomepageState extends State<Homepage> {
           children: myTabs.map((Tab tab) {
             final String? label = tab.text?.toLowerCase();
             return Center(
-              child: Text(
-                'This is the $label tab',
-                style: const TextStyle(fontSize: 36),
+              child: Column(
+                children: [
+                  Text(
+                    'This is the $label tab',
+                    style: const TextStyle(fontSize: 36),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => print(fetchAnimeList().then((result) {
+                      print(result);
+                    })),
+                    child: Text("I'm the $label tab button!\nClick me!"),
+                  ),
+                ],
               ),
             );
           }).toList(),
