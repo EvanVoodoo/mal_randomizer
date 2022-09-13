@@ -119,11 +119,11 @@ class _HomepageState extends State<Homepage> {
   // TODO: Learn how to implement endpoints
   Future<AnimeList> fetchAnimeList() async {
     Random rnd = Random();
-    String q = nouns.elementAt(rnd.nextInt(5000));
+    String q = nouns.elementAt(rnd.nextInt(2537));
     print(nouns.length);
     final response = await http.get(
       Uri.parse(
-          'https://api.myanimelist.net/v2/anime$q?fields=id,title,genres'),
+          'https://api.myanimelist.net/v2/anime?q=$q&fields=id,title,genres'),
       headers: <String, String>{
         'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"
       },
@@ -134,7 +134,7 @@ class _HomepageState extends State<Homepage> {
       // then parse the JSON.
       return aList;
     } else if (response.statusCode == 404 || aList.list.isEmpty) {
-      print("Query  $q  gave no results, searching again.");
+      print("Query  $q  gave no results, searching again. " + response.statusCode.toString());
       return fetchAnimeList();
     } else {
       // If the server did not return a 200 OK response,
