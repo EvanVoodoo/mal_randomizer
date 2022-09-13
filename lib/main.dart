@@ -132,6 +132,7 @@ class _HomepageState extends State<Homepage> {
     if (response.statusCode == 200 && aList.list.isNotEmpty) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
+      print(q);
       return aList;
     } else if (response.statusCode == 404 || aList.list.isEmpty) {
       print("Query  $q  gave no results, searching again. " + response.statusCode.toString());
