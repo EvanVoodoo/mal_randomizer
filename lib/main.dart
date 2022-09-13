@@ -3,73 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:english_words/english_words.dart';
 import 'dart:convert';
 import 'dart:math';
+import "./anime_list_view.dart";
+import "./anime_view.dart";
 
 void main() {
   runApp(MalPicker());
-}
-
-class AnimeList {
-  List<Anime> list = [];
-  int userId = -1;
-
-  AnimeList.list({
-    required this.list,
-  });
-
-  AnimeList.userList({
-    required this.list,
-    required this.userId,
-  });
-
-  AnimeList.fromJson(Map<String, dynamic> json) {
-    if (json["data"].runtimeType != Null) {
-      List<dynamic> data = json["data"];
-      // List<Map<String, Map<String, dynamic>>> data = json["data"];
-      data.forEach((value) {
-        value.forEach((key, value) {
-          Node node = Node(anime: value);
-          list.add(node.toAnime(node.anime));
-        });
-      });
-    }
-  }
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return super.toString();
-  }
-}
-
-class Node {
-  final Map<String, dynamic> anime;
-
-  Node({
-    required this.anime,
-  });
-
-  Anime toAnime(anime) {
-    return Anime(
-      id: anime["id"],
-      title: anime["title"],
-    );
-  }
-}
-
-class Anime {
-  final int id;
-  final String title;
-
-  Anime({
-    required this.id,
-    required this.title,
-  });
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "Anime: $title id: $id\n";
-  }
 }
 
 List<Color> colorPalette = <Color>[
@@ -103,11 +41,8 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-Random _rnd = Random();
-
-String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+AnimeList animeList = AnimeList();
+bool showList = false;
 
 class _HomepageState extends State<Homepage> {
   List<Tab> myTabs = <Tab>[
@@ -123,7 +58,7 @@ class _HomepageState extends State<Homepage> {
     print(nouns.length);
     final response = await http.get(
       Uri.parse(
-          'https://api.myanimelist.net/v2/anime?q=$q&fields=id,title,genres'),
+          'https://api.myanimelist.net/v2/anime?q=$q&fields=id,title,main_picture,genres'),
       headers: <String, String>{
         'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"
       },
@@ -133,9 +68,13 @@ class _HomepageState extends State<Homepage> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       print(q);
+      setState(() {
+        showList = true;
+      });
       return aList;
     } else if (response.statusCode == 404 || aList.list.isEmpty) {
-      print("Query  $q  gave no results, searching again. " + response.statusCode.toString());
+      print("Query  $q  gave no results, searching again. " +
+          response.statusCode.toString());
       return fetchAnimeList();
     } else {
       // If the server did not return a 200 OK response,
@@ -169,14 +108,14 @@ class _HomepageState extends State<Homepage> {
             return Center(
               child: Column(
                 children: [
-                  Text(
-                    'This is the $label tab',
-                    style: const TextStyle(fontSize: 36),
-                  ),
+                  AnimeListView(animeList),
                   ElevatedButton(
-                    onPressed: () => print(fetchAnimeList().then((result) {
-                      print(result.list);
-                    })),
+                    onPressed: () {
+                      print(fetchAnimeList().then((result) {
+                        print(result.list);
+                        animeList = result;
+                      }));
+                    },
                     child: Text("I'm the $label tab button!\nClick me!"),
                   ),
                 ],
