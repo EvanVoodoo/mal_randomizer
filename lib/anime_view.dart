@@ -40,7 +40,7 @@ class AnimeView extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(anime.title),
+            Text(anime.title, overflow: TextOverflow.ellipsis,),
             Text(anime.id.toString()),
           ],
         ),

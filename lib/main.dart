@@ -107,6 +107,7 @@ class _HomepageState extends State<Homepage> {
             final String? label = tab.text?.toLowerCase();
             return Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   AnimeListView(animeList),
                   ElevatedButton(
