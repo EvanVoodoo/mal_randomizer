@@ -28,21 +28,38 @@ class AnimeView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              child: Image.network(anime.mainPic),
-              height: 120,
-            ),
-          ],
+        Container(
+          padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 120,
+                child: Image.network(anime.mainPic),
+              ),
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(anime.title, overflow: TextOverflow.ellipsis,),
-            Text(anime.id.toString()),
-          ],
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  anime.title,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(anime.id.toString()),
+              ],
+            ),
+          ),
         ),
       ],
     );

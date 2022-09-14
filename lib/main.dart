@@ -46,9 +46,8 @@ bool showList = false;
 
 class _HomepageState extends State<Homepage> {
   List<Tab> myTabs = <Tab>[
-    const Tab(text: "LEFT"),
-    const Tab(text: "CENTER"),
-    const Tab(text: "RIGHT"),
+    const Tab(text: "Random Anime"),
+    const Tab(text: "Genres"),
   ];
 
   // TODO: Learn how to implement endpoints
@@ -87,7 +86,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: myTabs.length,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: colorPalette[0],
@@ -110,14 +109,20 @@ class _HomepageState extends State<Homepage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   AnimeListView(animeList),
-                  ElevatedButton(
-                    onPressed: () {
-                      print(fetchAnimeList().then((result) {
-                        print(result.list);
-                        animeList = result;
-                      }));
-                    },
-                    child: Text("I'm the $label tab button!\nClick me!"),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorPalette[0],
+                      ),
+                      onPressed: () {
+                        print(fetchAnimeList().then((result) {
+                          print(result.list);
+                          animeList = result;
+                        }));
+                      },
+                      child: Text("I'm the $label button!\nClick me!"),
+                    ),
                   ),
                 ],
               ),

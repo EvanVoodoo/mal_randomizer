@@ -20,19 +20,13 @@ class AnimeList {
     if (json["data"].runtimeType != Null) {
       List<dynamic> data = json["data"];
       // List<Map<String, Map<String, dynamic>>> data = json["data"];
-      data.forEach((value) {
+      for (var value in data) {
         value.forEach((key, value) {
           Node node = Node(anime: value);
           list.add(node.toAnime(node.anime));
         });
-      });
+      }
     }
-  }
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return super.toString();
   }
 }
 
@@ -59,37 +53,33 @@ class AnimeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (animeList.list.length > 0) {
+    if (animeList.list.isNotEmpty) {
       return Expanded(
         flex: 1,
-        child: Container(
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-              ...animeList.list.map((anime) {
-                return AnimeView(anime);
-              }).toList(),
-            ],
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-          ),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            ...animeList.list.map((anime) {
+              return AnimeView(anime);
+            }).toList(),
+          ],
         ),
       );
     } else {
-      return Container(
-        child: ListView(
-          children: [
-            Text(
-              "List currently empty.",
-              style: TextStyle(
-                fontSize: 32,
-              ),
-              textAlign: TextAlign.center,
+      return ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: const [
+          Text(
+            "List currently empty.",
+            style: TextStyle(
+              fontSize: 32,
             ),
-          ],
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       );
     }
   }
