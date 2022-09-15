@@ -45,6 +45,7 @@ class _FilterViewState extends State<FilterView> {
     for (var genre in genres) {
       if (genre["value"]) list.add(genre["name"]);
     }
+    print(list);
     return list;
   }
 
