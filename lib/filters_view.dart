@@ -40,8 +40,12 @@ class _FilterViewState extends State<FilterView> {
     },
   ];
 
-  String addFilter(String filter) {
-    return filter;
+  List<String> checkFilters() {
+    List<String> list = [];
+    for (var genre in genres) {
+      if (genre["value"]) list.add(genre["name"]);
+    }
+    return list;
   }
 
   @override
