@@ -4,7 +4,6 @@ import 'package:english_words/english_words.dart';
 import 'dart:convert';
 import 'dart:math';
 import "./anime_list_view.dart";
-import "./anime_view.dart";
 
 void main() {
   runApp(MalPicker());
@@ -45,12 +44,6 @@ AnimeList animeList = AnimeList();
 bool showList = false;
 
 class _HomepageState extends State<Homepage> {
-  List<Tab> myTabs = <Tab>[
-    const Tab(text: "Random Anime"),
-    const Tab(text: "Genres"),
-  ];
-
-  // TODO: Learn how to implement endpoints
   Future<AnimeList> fetchAnimeList() async {
     Random rnd = Random();
     String q = nouns.elementAt(rnd.nextInt(2537));
@@ -90,21 +83,24 @@ class _HomepageState extends State<Homepage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: colorPalette[0],
-          title: Text(
-            "MAL Randomizer",
+          title: const Text(
+            " MAL Randomizer",
             style: TextStyle(
               fontSize: 26,
               color: Colors.white,
             ),
+            textAlign: TextAlign.center,
           ),
-          bottom: TabBar(
-            tabs: myTabs,
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: "Random Anime"),
+              Tab(text: "Filters"),
+            ],
           ),
         ),
         body: TabBarView(
-          children: myTabs.map((Tab tab) {
-            final String? label = tab.text?.toLowerCase();
-            return Center(
+          children: [
+            Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -131,8 +127,23 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ],
               ),
-            );
-          }).toList(),
+            ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    "To be Implemented.",
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
