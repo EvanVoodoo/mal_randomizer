@@ -42,6 +42,7 @@ class Node {
       id: anime["id"],
       title: anime["title"],
       mainPic: anime["main_picture"]["medium"],
+      genres: anime["genres"],
     );
   }
 }

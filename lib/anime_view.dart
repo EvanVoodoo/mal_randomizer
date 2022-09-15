@@ -4,17 +4,27 @@ class Anime {
   final int id;
   final String title;
   final String mainPic;
+  final List<dynamic> genres;
 
   Anime({
     required this.id,
     required this.title,
     required this.mainPic,
+    required this.genres,
   });
+
+  List<String> getGenres(List<dynamic> genres) {
+    List<String> list = [];
+    for (int i = 0; i < genres.length; i++) {
+      list.add(genres[i]["name"]);
+    }
+    return list;
+  }
 
   @override
   String toString() {
-    // TODO: implement toString
-    return "Anime: $title id: $id\n";
+    var list = getGenres(genres);
+    return "\nAnime: $title id: $id\n Genres: $list";
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:english_words/english_words.dart';
 import 'dart:convert';
 import 'dart:math';
 import "./anime_list_view.dart";
+import './filters_view.dart';
 
 void main() {
   runApp(MalPicker());
@@ -47,7 +48,6 @@ class _HomepageState extends State<Homepage> {
   Future<AnimeList> fetchAnimeList() async {
     Random rnd = Random();
     String q = nouns.elementAt(rnd.nextInt(2537));
-    print(nouns.length);
     final response = await http.get(
       Uri.parse(
           'https://api.myanimelist.net/v2/anime?q=$q&fields=id,title,main_picture,genres'),
@@ -75,6 +75,13 @@ class _HomepageState extends State<Homepage> {
           'Failed to load anime list: ' + response.statusCode.toString());
     }
   }
+
+  List<Checkbox> genres = [
+    Checkbox(
+      value: false,
+      onChanged: (value) {},
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -128,21 +135,7 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    "To be Implemented.",
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
+            FilterView(),
           ],
         ),
       ),
