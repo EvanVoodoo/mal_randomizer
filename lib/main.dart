@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:math';
 import "./anime_list_view.dart";
 import './filters_view.dart';
+import 'anime_view.dart';
 
 void main() {
   runApp(MalPicker());
@@ -42,7 +43,7 @@ class Homepage extends StatefulWidget {
 }
 
 AnimeList animeList = AnimeList();
-bool showList = false;
+FilterView filterView = FilterView();
 
 class _HomepageState extends State<Homepage> {
   Future<AnimeList> fetchAnimeList() async {
@@ -60,9 +61,22 @@ class _HomepageState extends State<Homepage> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       print(q);
-      setState(() {
-        showList = true;
-      });
+      List<dynamic> genres = filterView.getActiveFilters();
+      print("These are the selected genres: $genres");
+      if (genres.isNotEmpty) {
+        for (var x in genres) {
+          List<Anime> removalList = [];
+          for (var a in aList.list) {
+            if (!a.getGenres().contains(x)) {
+              removalList.add(a);
+            }
+          }
+          for (var a in removalList) {
+            aList.list.remove(a);
+          }
+        }
+      }
+      setState(() {});
       return aList;
     } else if (response.statusCode == 404 || aList.list.isEmpty) {
       print("Query  $q  gave no results, searching again. " +
@@ -75,13 +89,6 @@ class _HomepageState extends State<Homepage> {
           'Failed to load anime list: ' + response.statusCode.toString());
     }
   }
-
-  List<Checkbox> genres = [
-    Checkbox(
-      value: false,
-      onChanged: (value) {},
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +142,7 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            FilterView(),
+            filterView,
           ],
         ),
       ),

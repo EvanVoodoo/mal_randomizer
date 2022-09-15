@@ -13,7 +13,7 @@ class Anime {
     required this.genres,
   });
 
-  List<String> getGenres(List<dynamic> genres) {
+  List<String> getGenres() {
     List<String> list = [];
     for (int i = 0; i < genres.length; i++) {
       list.add(genres[i]["name"]);
@@ -21,9 +21,21 @@ class Anime {
     return list;
   }
 
+  String printGenres() {
+    String result = "";
+    if (genres.isNotEmpty) {
+      for (int i = 0; i < genres.length - 1; i++) {
+        result += genres[i]["name"];
+        result += ", ";
+      }
+      result += genres[genres.length - 1]["name"];
+    }
+    return result;
+  }
+
   @override
   String toString() {
-    var list = getGenres(genres);
+    var list = getGenres();
     return "\nAnime: $title id: $id\n Genres: $list";
   }
 }
@@ -66,7 +78,26 @@ class AnimeView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(anime.id.toString()),
+                Text(
+                  anime.id.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  anime.printGenres(),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ],
             ),
           ),
