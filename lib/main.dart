@@ -91,7 +91,7 @@ class _HomepageState extends State<Homepage> {
         appBar: AppBar(
           backgroundColor: colorPalette[0],
           title: Text(
-            "MAL Picker",
+            "MAL Randomizer",
             style: TextStyle(
               fontSize: 26,
               color: Colors.white,
@@ -106,9 +106,14 @@ class _HomepageState extends State<Homepage> {
             final String? label = tab.text?.toLowerCase();
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  AnimeListView(animeList),
+                  SizedBox(
+                    height: 489.4,
+                    child: Center(
+                      child: AnimeListView(animeList),
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 9),
                     child: ElevatedButton(
@@ -121,7 +126,7 @@ class _HomepageState extends State<Homepage> {
                           animeList = result;
                         }));
                       },
-                      child: Text("I'm the $label button!\nClick me!"),
+                      child: Text("Randomize"),
                     ),
                   ),
                 ],
