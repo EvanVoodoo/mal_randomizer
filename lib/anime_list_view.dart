@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import './anime_view.dart';
 
 class AnimeList {
-  List<Anime> list = [];
+  List<Anime> animes = [];
   int userId = -1;
 
   AnimeList();
 
-  AnimeList.list({
-    required this.list,
+  AnimeList.animes({
+    required this.animes,
   });
 
   AnimeList.userList({
-    required this.list,
+    required this.animes,
     required this.userId,
   });
 
@@ -23,7 +23,7 @@ class AnimeList {
       for (var value in data) {
         value.forEach((key, value) {
           Node node = Node(anime: value);
-          list.add(node.toAnime(node.anime));
+          animes.add(node.toAnime(node.anime));
         });
       }
     }
@@ -43,6 +43,7 @@ class Node {
       title: anime["title"],
       mainPic: anime["main_picture"]["medium"],
       genres: anime["genres"],
+      rating: anime["rating"],
     );
   }
 }
@@ -54,7 +55,7 @@ class AnimeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (animeList.list.isNotEmpty) {
+    if (animeList.animes.isNotEmpty) {
       return Expanded(
         flex: 1,
         child: ListView(
@@ -62,7 +63,7 @@ class AnimeListView extends StatelessWidget {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: [
-            ...animeList.list.map((anime) {
+            ...animeList.animes.map((anime) {
               return AnimeView(anime);
             }).toList(),
           ],

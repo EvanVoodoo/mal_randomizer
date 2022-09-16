@@ -1,7 +1,13 @@
 import "package:flutter/material.dart";
 
 class FilterView extends StatefulWidget {
-  List<String> _activeFilters = [];
+  List<String> _activeGenreFilters = [];
+  List<String> _activeRatingFilters = [
+    "g",
+    "pg",
+    "pg_13",
+    "r",
+  ];
 
   List<Map<String, dynamic>> genres = [
     {
@@ -40,54 +46,98 @@ class FilterView extends StatefulWidget {
 
   List<Map<String, dynamic>> ratings = [
     {
-      "name": "G - All Ages",
+      "name": "g",
+      "show_name": "G - All Ages",
+      "value": true,
+    },
+    {
+      "name": "pg",
+      "show_name": "PG - Children",
+      "value": true,
+    },
+    {
+      "name": "pg_13",
+      "show_name": "PG-13 - Teens 13 or older",
+      "value": true,
+    },
+    {
+      "name": "r",
+      "show_name": "R - 17+",
+      "value": true,
+    },
+  ];
+
+  List<Map<String, dynamic>> nsfwRatings = [
+    {
+      "name": "r+",
+      "show_name": "R+ - Mild Nudity",
       "value": false,
     },
     {
-      "name": "PG - Children",
-      "value": false,
-    },
-    {
-      "name": "PG-13 - Teens 13 or older",
-      "value": false,
-    },
-    {
-      "name": "R - 17+",
-      "value": false,
-    },
-    {
-      "name": "NSFW", // R+ - Mild Nudity & Rx - Hentai
+      "name": "rx",
+      "show_name": "Hentai",
       "value": false,
     },
   ];
 
-  List<String> getActiveFilters() {
-    return _activeFilters;
-  }
+  List<String> get activeGenreFilters => _activeGenreFilters;
 
-  void activateFilter(String filter) {
-    if (!_activeFilters.contains(filter)) {
-      _activeFilters.add(filter);
+  List<String> get activeRatingFilters => _activeRatingFilters;
+
+  void activateFilter(String filter, String type) {
+    switch (type.toLowerCase()) {
+      case "genres":
+      case "genre":
+        {
+          if (!_activeGenreFilters.contains(filter)) {
+            _activeGenreFilters.add(filter);
+          }
+        }
+        break;
+      case "ratings":
+      case "rating":
+        {
+          if (!_activeRatingFilters.contains(filter)) {
+            _activeRatingFilters.add(filter);
+          }
+        }
+        break;
+      default:
+        {}
     }
   }
 
-  void deactivateFilter(String filter) {
-    if (_activeFilters.contains(filter)) {
-      _activeFilters.remove(filter);
+  void deactivateFilter(String filter, String type) {
+    switch (type.toLowerCase()) {
+      case "genres":
+      case "genre":
+        {
+          if (_activeGenreFilters.contains(filter)) {
+            _activeGenreFilters.remove(filter);
+          }
+        }
+        break;
+      case "ratings":
+      case "rating":
+        {
+          if (_activeRatingFilters.contains(filter)) {
+            _activeRatingFilters.remove(filter);
+          }
+        }
+        break;
+      default:
+        {}
     }
   }
 
   @override
-  State<FilterView> createState() =>
-      _FilterViewState(_activeFilters, genres, ratings);
+  State<FilterView> createState() => _FilterViewState(this);
 }
 
 class _FilterViewState extends State<FilterView> {
-  List<String> activeFilters = [];
-  List<Map<String, dynamic>> genres;
-  List<Map<String, dynamic>> ratings;
+  FilterView filterView;
 
-  _FilterViewState(this.activeFilters, this.genres, this.ratings);
+  _FilterViewState(this.filterView);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +150,7 @@ class _FilterViewState extends State<FilterView> {
               subtitle: const Text(
                   "Filter your results to include the selected genres."),
               children: [
-                ...genres.map((e) {
+                ...filterView.genres.map((e) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: Row(
@@ -117,8 +167,12 @@ class _FilterViewState extends State<FilterView> {
                             onChanged: (value) {
                               setState(() {
                                 e["value"] = value;
-                                if (e["value"]) activeFilters.add(e["name"]);
-                                else activeFilters.remove(e["name"]);
+                                if (e["value"]) {
+                                  filterView.activateFilter(e["name"], "genre");
+                                } else {
+                                  filterView.deactivateFilter(
+                                      e["name"], "genre");
+                                }
                                 print(e["name"] + ": " + e["value"].toString());
                               });
                             },
@@ -135,7 +189,7 @@ class _FilterViewState extends State<FilterView> {
               subtitle: const Text(
                   "Filter your results to include the selected age ratings."),
               children: [
-                ...ratings.map((e) {
+                ...filterView.ratings.map((e) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: Row(
@@ -143,7 +197,7 @@ class _FilterViewState extends State<FilterView> {
                       children: [
                         SizedBox(
                           width: 200,
-                          child: Text(e["name"]),
+                          child: Text(e["show_name"]),
                         ),
                         SizedBox(
                           width: 50,
@@ -152,6 +206,13 @@ class _FilterViewState extends State<FilterView> {
                             onChanged: (value) {
                               setState(() {
                                 e["value"] = value;
+                                if (e["value"]) {
+                                  filterView.activateFilter(
+                                      e["name"], "rating");
+                                } else {
+                                  filterView.deactivateFilter(
+                                      e["name"], "rating");
+                                }
                                 print(e["name"] + ": " + e["value"].toString());
                               });
                             },
@@ -161,6 +222,56 @@ class _FilterViewState extends State<FilterView> {
                     ),
                   );
                 }),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 28.0),
+                  child: ExpansionTile(
+                    title: const Text(
+                      "NSFW Ratings",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: const Text("Always off by default."),
+                    children: [
+                      ...filterView.nsfwRatings.map((e) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.only(left: 22.0, right: 2.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Text(e["show_name"]),
+                              ),
+                              SizedBox(
+                                width: 50,
+                                child: Checkbox(
+                                  value: e["value"],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      e["value"] = value;
+                                      // if (e["value"]) {
+                                      //   filterView.activateFilter(
+                                      //       e["name"], "rating");
+                                      // } else {
+                                      //   filterView.deactivateFilter(
+                                      //       e["name"], "rating");
+                                      // }
+                                      print(e["name"] +
+                                          ": " +
+                                          e["value"].toString());
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
