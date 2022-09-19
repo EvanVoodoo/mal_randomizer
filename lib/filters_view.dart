@@ -150,13 +150,13 @@ class FilterView extends StatefulWidget {
     },
   ];
 
-  List<Map<String, dynamic>> nsfwRatings = [
-    {
-      "name": "rx",
-      "show_name": "Rx - Hentai",
-      "value": false,
-    },
-  ];
+  // List<Map<String, dynamic>> nsfwRatings = [
+  //   {
+  //     "name": "rx",
+  //     "show_name": "Rx - Hentai",
+  //     "value": false,
+  //   },
+  // ];
 
   List<String> get activeGenreFilters => _activeGenreFilters;
 
