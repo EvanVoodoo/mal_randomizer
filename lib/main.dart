@@ -8,7 +8,7 @@ import './filters_view.dart';
 import 'anime_view.dart';
 
 void main() {
-  runApp(MalPicker());
+  runApp(const MalPicker());
 }
 
 List<Color> colorPalette = <Color>[
@@ -23,12 +23,12 @@ class MalPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "MAL Picker",
+      title: "MAL Randomizer",
       theme: ThemeData(
         primaryColor: colorPalette[0], //const Color.fromRGBO(48, 84, 164, 1),
         indicatorColor: colorPalette[1],
       ),
-      home: Homepage("MAL Picker Homepage"),
+      home: const Homepage("MAL Randomizer Homepage"),
     );
   }
 }
@@ -46,8 +46,10 @@ AnimeList animeList = AnimeList();
 FilterView filterView = FilterView();
 
 class _HomepageState extends State<Homepage> {
-  Future<AnimeList> fetchAnimeList() async {
+  Future<AnimeList> fetchAnimeList(AnimeList originList) async {
     Random rnd = Random();
+    AnimeList aList = AnimeList();
+    aList.merge(originList);
     String q = nouns.elementAt(rnd.nextInt(2537));
     final response = await http.get(
       Uri.parse(
@@ -56,11 +58,11 @@ class _HomepageState extends State<Homepage> {
         'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"
       },
     );
-    AnimeList aList = AnimeList.fromJson(jsonDecode(response.body));
+    aList.merge(AnimeList.fromJson(jsonDecode(response.body)));
     if (response.statusCode == 200 && aList.animes.isNotEmpty) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      print(q);
+      print(" \n$q");
       // Filter : Genres
       List<dynamic> genres = filterView.activeGenreFilters;
       print("These are the selected genres: $genres");
@@ -94,19 +96,19 @@ class _HomepageState extends State<Homepage> {
       for (var a in removalList) {
         aList.animes.remove(a);
       }
-
-      setState(() {});
-      return aList;
     } else if (response.statusCode == 404 || aList.animes.isEmpty) {
-      print("Query  $q  gave no results, searching again. " +
-          response.statusCode.toString());
-      return fetchAnimeList();
+      print(
+          "Query  $q  gave no results, searching again. ${response.statusCode}");
+      return fetchAnimeList(originList);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(
-          'Failed to load anime list: ' + response.statusCode.toString());
+      throw Exception('Failed to load anime list: ${response.statusCode}');
     }
+    if (aList.animes.length < 10) return fetchAnimeList(aList);
+
+    setState(() {});
+    return aList;
   }
 
   @override
@@ -150,12 +152,12 @@ class _HomepageState extends State<Homepage> {
                         backgroundColor: colorPalette[0],
                       ),
                       onPressed: () {
-                        print(fetchAnimeList().then((result) {
+                        print(fetchAnimeList(AnimeList()).then((result) {
                           print(result.animes);
                           animeList = result;
                         }));
                       },
-                      child: Text("Randomize"),
+                      child: const Text("Randomize"),
                     ),
                   ),
                 ],

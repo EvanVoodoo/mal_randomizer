@@ -3,7 +3,6 @@ import './anime_view.dart';
 
 class AnimeList {
   List<Anime> animes = [];
-  int userId = -1;
 
   AnimeList();
 
@@ -11,15 +10,9 @@ class AnimeList {
     required this.animes,
   });
 
-  AnimeList.userList({
-    required this.animes,
-    required this.userId,
-  });
-
   AnimeList.fromJson(Map<String, dynamic> json) {
     if (json["data"].runtimeType != Null) {
       List<dynamic> data = json["data"];
-      // List<Map<String, Map<String, dynamic>>> data = json["data"];
       for (var value in data) {
         value.forEach((key, value) {
           Node node = Node(anime: value);
@@ -27,6 +20,10 @@ class AnimeList {
         });
       }
     }
+  }
+
+  void merge(AnimeList aList) {
+    this.animes = this.animes + aList.animes;
   }
 }
 
@@ -56,18 +53,22 @@ class AnimeListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (animeList.animes.isNotEmpty) {
-      return Expanded(
-        flex: 1,
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            ...animeList.animes.map((anime) {
-              return AnimeView(anime);
-            }).toList(),
-          ],
-        ),
+      return Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: [
+                ...animeList.animes.map((anime) {
+                  return AnimeView(anime);
+                }).toList(),
+              ],
+            ),
+          ),
+        ],
       );
     } else {
       return ListView(
