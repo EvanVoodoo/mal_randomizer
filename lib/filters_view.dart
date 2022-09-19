@@ -75,7 +75,7 @@ class FilterView extends StatefulWidget {
     },
     {
       "name": "rx",
-      "show_name": "Hentai",
+      "show_name": "Rx - Hentai",
       "value": false,
     },
   ];
@@ -251,13 +251,13 @@ class _FilterViewState extends State<FilterView> {
                                   onChanged: (value) {
                                     setState(() {
                                       e["value"] = value;
-                                      // if (e["value"]) {
-                                      //   filterView.activateFilter(
-                                      //       e["name"], "rating");
-                                      // } else {
-                                      //   filterView.deactivateFilter(
-                                      //       e["name"], "rating");
-                                      // }
+                                      if (e["value"]) {
+                                        filterView.activateFilter(
+                                            e["name"], "rating");
+                                      } else {
+                                        filterView.deactivateFilter(
+                                            e["name"], "rating");
+                                      }
                                       print(e["name"] +
                                           ": " +
                                           e["value"].toString());

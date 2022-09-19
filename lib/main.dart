@@ -47,13 +47,18 @@ FilterView filterView = FilterView();
 
 class _HomepageState extends State<Homepage> {
   Future<AnimeList> fetchAnimeList(AnimeList originList) async {
+    List<String> genres = filterView.activeGenreFilters;
+    List<String> ratings = filterView.activeRatingFilters;
+    bool nsfw = false;
+    if (ratings.contains("rx")) nsfw = true;
+
     Random rnd = Random();
     AnimeList aList = AnimeList();
     aList.merge(originList);
     String q = nouns.elementAt(rnd.nextInt(2537));
     final response = await http.get(
       Uri.parse(
-          'https://api.myanimelist.net/v2/anime?q=$q&fields=id,title,main_picture,genres, rating'),
+          'https://api.myanimelist.net/v2/anime?q=$q&nsfw=$nsfw&fields=id,title,main_picture,genres,rating'),
       headers: <String, String>{
         'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"
       },
@@ -64,7 +69,6 @@ class _HomepageState extends State<Homepage> {
       // then parse the JSON.
       print(" \n$q");
       // Filter : Genres
-      List<dynamic> genres = filterView.activeGenreFilters;
       print("These are the selected genres: $genres");
       if (genres.isNotEmpty) {
         for (var x in genres) {
@@ -80,7 +84,6 @@ class _HomepageState extends State<Homepage> {
         }
       }
       // Filter : Ratings
-      List<dynamic> ratings = filterView.activeRatingFilters;
       print("These are the selected ratings: $ratings");
 
       List<Anime> removalList = [];
@@ -105,7 +108,7 @@ class _HomepageState extends State<Homepage> {
       // then throw an exception.
       throw Exception('Failed to load anime list: ${response.statusCode}');
     }
-    if (aList.animes.length < 10) return fetchAnimeList(aList);
+    // if (aList.animes.length < 10) return fetchAnimeList(aList);
 
     setState(() {});
     return aList;

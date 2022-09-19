@@ -58,9 +58,12 @@ class AnimeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              SizedBox(
-                height: 120,
-                child: Image.network(anime.mainPic),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: SizedBox(
+                  height: 120,
+                  child: Image.network(anime.mainPic),
+                ),
               ),
             ],
           ),
