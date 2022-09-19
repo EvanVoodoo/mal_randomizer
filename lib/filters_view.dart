@@ -15,7 +15,47 @@ class FilterView extends StatefulWidget {
       "value": false,
     },
     {
+      "name": "Adventure",
+      "value": false,
+    },
+    {
+      "name": "Avant Garde",
+      "value": false,
+    },
+    {
+      "name": "Award Winning",
+      "value": false,
+    },
+    {
+      "name": "Boys Love",
+      "value": false,
+    },
+    {
       "name": "Comedy",
+      "value": false,
+    },
+    {
+      "name": "Drama",
+      "value": false,
+    },
+    {
+      "name": "Fantasy",
+      "value": false,
+    },
+    {
+      "name": "Girls Love",
+      "value": false,
+    },
+    {
+      "name": "Gourmet",
+      "value": false,
+    },
+    {
+      "name": "Horror",
+      "value": false,
+    },
+    {
+      "name": "Mystery",
       "value": false,
     },
     {
@@ -23,7 +63,49 @@ class FilterView extends StatefulWidget {
       "value": false,
     },
     {
-      "name": "Shounen",
+      "name": "Sci-Fi",
+      "value": false,
+    },
+    {
+      "name": "Slice of Life",
+      "value": false,
+    },
+    {
+      "name": "Sports",
+      "value": false,
+    },
+    {
+      "name": "Supernatural",
+      "value": false,
+    },
+    {
+      "name": "Suspense",
+      "value": false,
+    },
+  ];
+
+  // List<Map<String, dynamic>> nsfwGenres = [
+  //   {
+  //     "name": "Ecchi",
+  //     "value": false,
+  //   },
+  //   {
+  //     "name": "Erotica",
+  //     "value": false,
+  //   },
+  //   {
+  //     "name": "Hentai",
+  //     "value": false,
+  //   },
+  // ];
+
+  List<Map<String, dynamic>> demographicGenres = [
+    {
+      "name": "Josei",
+      "value": false,
+    },
+    {
+      "name": "Kids",
       "value": false,
     },
     {
@@ -35,11 +117,7 @@ class FilterView extends StatefulWidget {
       "value": false,
     },
     {
-      "name": "Adventure",
-      "value": false,
-    },
-    {
-      "name": "Slice of Life",
+      "name": "Shounen",
       "value": false,
     },
   ];
@@ -65,14 +143,14 @@ class FilterView extends StatefulWidget {
       "show_name": "R - 17+",
       "value": true,
     },
+    {
+      "name": "r+",
+      "show_name": "R+ - Contains Mild Nudity\n   (off by default)",
+      "value": false,
+    },
   ];
 
   List<Map<String, dynamic>> nsfwRatings = [
-    {
-      "name": "r+",
-      "show_name": "R+ - Mild Nudity",
-      "value": false,
-    },
     {
       "name": "rx",
       "show_name": "Rx - Hentai",
@@ -150,38 +228,150 @@ class _FilterViewState extends State<FilterView> {
               subtitle: const Text(
                   "Filter your results to include the selected genres."),
               children: [
-                ...filterView.genres.map((e) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: Text(e["name"]),
-                        ),
-                        SizedBox(
-                          width: 50,
-                          child: Checkbox(
-                            value: e["value"],
-                            onChanged: (value) {
-                              setState(() {
-                                e["value"] = value;
-                                if (e["value"]) {
-                                  filterView.activateFilter(e["name"], "genre");
-                                } else {
-                                  filterView.deactivateFilter(
-                                      e["name"], "genre");
-                                }
-                                print(e["name"] + ": " + e["value"].toString());
-                              });
-                            },
-                          ),
-                        ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 28.0),
+                  child: ExpansionTile(
+                    title: const Text(
+                      "Demographics",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                  );
-                }),
+                    children: [
+                      ...filterView.demographicGenres.map((e) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Text(e["name"]),
+                              ),
+                              SizedBox(
+                                width: 50,
+                                child: Checkbox(
+                                  value: e["value"],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      e["value"] = value;
+                                      if (e["value"]) {
+                                        filterView.activateFilter(
+                                            e["name"], "genre");
+                                      } else {
+                                        filterView.deactivateFilter(
+                                            e["name"], "genre");
+                                      }
+                                      print(e["name"] +
+                                          ": " +
+                                          e["value"].toString());
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 28.0),
+                  child: ExpansionTile(
+                    title: const Text(
+                      "Standard Genres",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    children: [
+                      ...filterView.genres.map((e) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Text(e["name"]),
+                              ),
+                              SizedBox(
+                                width: 50,
+                                child: Checkbox(
+                                  value: e["value"],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      e["value"] = value;
+                                      if (e["value"]) {
+                                        filterView.activateFilter(
+                                            e["name"], "genre");
+                                      } else {
+                                        filterView.deactivateFilter(
+                                            e["name"], "genre");
+                                      }
+                                      print(e["name"] +
+                                          ": " +
+                                          e["value"].toString());
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8.0, right: 28.0),
+                //   child: ExpansionTile(
+                //     title: const Text(
+                //       "NSFW Genres",
+                //       style: TextStyle(
+                //         fontSize: 16,
+                //       ),
+                //     ),
+                //     children: [
+                //       ...filterView.nsfwGenres.map((e) {
+                //         return Padding(
+                //           padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               SizedBox(
+                //                 width: 200,
+                //                 child: Text(e["name"]),
+                //               ),
+                //               SizedBox(
+                //                 width: 50,
+                //                 child: Checkbox(
+                //                   value: e["value"],
+                //                   onChanged: (value) {
+                //                     setState(() {
+                //                       e["value"] = value;
+                //                       if (e["value"]) {
+                //                         filterView.activateFilter(
+                //                             e["name"], "genre");
+                //                       } else {
+                //                         filterView.deactivateFilter(
+                //                             e["name"], "genre");
+                //                       }
+                //                       print(e["name"] +
+                //                           ": " +
+                //                           e["value"].toString());
+                //                     });
+                //                   },
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         );
+                //       }),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             ExpansionTile(
@@ -222,56 +412,56 @@ class _FilterViewState extends State<FilterView> {
                     ),
                   );
                 }),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 28.0),
-                  child: ExpansionTile(
-                    title: const Text(
-                      "NSFW Ratings",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    subtitle: const Text("Always off by default."),
-                    children: [
-                      ...filterView.nsfwRatings.map((e) {
-                        return Padding(
-                          padding:
-                              const EdgeInsets.only(left: 22.0, right: 2.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: Text(e["show_name"]),
-                              ),
-                              SizedBox(
-                                width: 50,
-                                child: Checkbox(
-                                  value: e["value"],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      e["value"] = value;
-                                      if (e["value"]) {
-                                        filterView.activateFilter(
-                                            e["name"], "rating");
-                                      } else {
-                                        filterView.deactivateFilter(
-                                            e["name"], "rating");
-                                      }
-                                      print(e["name"] +
-                                          ": " +
-                                          e["value"].toString());
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8.0, right: 28.0),
+                //   child: ExpansionTile(
+                //     title: const Text(
+                //       "NSFW Ratings",
+                //       style: TextStyle(
+                //         fontSize: 16,
+                //       ),
+                //     ),
+                //     subtitle: const Text("Always off by default."),
+                //     children: [
+                //       ...filterView.nsfwRatings.map((e) {
+                //         return Padding(
+                //           padding:
+                //               const EdgeInsets.only(left: 22.0, right: 2.0),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               SizedBox(
+                //                 width: 200,
+                //                 child: Text(e["show_name"]),
+                //               ),
+                //               SizedBox(
+                //                 width: 50,
+                //                 child: Checkbox(
+                //                   value: e["value"],
+                //                   onChanged: (value) {
+                //                     setState(() {
+                //                       e["value"] = value;
+                //                       if (e["value"]) {
+                //                         filterView.activateFilter(
+                //                             e["name"], "rating");
+                //                       } else {
+                //                         filterView.deactivateFilter(
+                //                             e["name"], "rating");
+                //                       }
+                //                       print(e["name"] +
+                //                           ": " +
+                //                           e["value"].toString());
+                //                     });
+                //                   },
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         );
+                //       }),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ],
