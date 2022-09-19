@@ -4,17 +4,42 @@ class Anime {
   final int id;
   final String title;
   final String mainPic;
+  final List<dynamic> genres;
+  final String rating;
 
   Anime({
     required this.id,
     required this.title,
     required this.mainPic,
+    required this.genres,
+    required this.rating,
   });
+
+  List<String> get getGenres {
+    List<String> list = [];
+    for (int i = 0; i < genres.length; i++) {
+      list.add(genres[i]["name"]);
+    }
+    return list;
+  }
+
+  String get getRating => rating;
+
+  String printGenres() {
+    String result = "";
+    if (genres.isNotEmpty) {
+      for (int i = 0; i < genres.length - 1; i++) {
+        result += genres[i]["name"];
+        result += ", ";
+      }
+      result += genres[genres.length - 1]["name"];
+    }
+    return result;
+  }
 
   @override
   String toString() {
-    // TODO: implement toString
-    return "Anime: $title id: $id\n";
+    return "\nAnime: $title id: $id\n Genres: $getGenres\n Rating: $getRating";
   }
 }
 
@@ -33,9 +58,12 @@ class AnimeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              SizedBox(
-                height: 120,
-                child: Image.network(anime.mainPic),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: SizedBox(
+                  height: 120,
+                  child: Image.network(anime.mainPic),
+                ),
               ),
             ],
           ),
@@ -56,7 +84,26 @@ class AnimeView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(anime.id.toString()),
+                Text(
+                  anime.id.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  anime.printGenres(),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ],
             ),
           ),

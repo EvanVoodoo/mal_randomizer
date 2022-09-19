@@ -2,31 +2,28 @@ import 'package:flutter/material.dart';
 import './anime_view.dart';
 
 class AnimeList {
-  List<Anime> list = [];
-  int userId = -1;
+  List<Anime> animes = [];
 
   AnimeList();
 
-  AnimeList.list({
-    required this.list,
-  });
-
-  AnimeList.userList({
-    required this.list,
-    required this.userId,
+  AnimeList.animes({
+    required this.animes,
   });
 
   AnimeList.fromJson(Map<String, dynamic> json) {
     if (json["data"].runtimeType != Null) {
       List<dynamic> data = json["data"];
-      // List<Map<String, Map<String, dynamic>>> data = json["data"];
       for (var value in data) {
         value.forEach((key, value) {
           Node node = Node(anime: value);
-          list.add(node.toAnime(node.anime));
+          animes.add(node.toAnime(node.anime));
         });
       }
     }
+  }
+
+  void merge(AnimeList aList) {
+    this.animes = this.animes + aList.animes;
   }
 }
 
@@ -42,6 +39,8 @@ class Node {
       id: anime["id"],
       title: anime["title"],
       mainPic: anime["main_picture"]["medium"],
+      genres: anime["genres"],
+      rating: anime["rating"],
     );
   }
 }
@@ -53,19 +52,23 @@ class AnimeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (animeList.list.isNotEmpty) {
-      return Expanded(
-        flex: 1,
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            ...animeList.list.map((anime) {
-              return AnimeView(anime);
-            }).toList(),
-          ],
-        ),
+    if (animeList.animes.isNotEmpty) {
+      return Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: [
+                ...animeList.animes.map((anime) {
+                  return AnimeView(anime);
+                }).toList(),
+              ],
+            ),
+          ),
+        ],
       );
     } else {
       return ListView(
