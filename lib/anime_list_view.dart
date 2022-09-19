@@ -23,7 +23,7 @@ class AnimeList {
   }
 
   void merge(AnimeList aList) {
-    this.animes = this.animes + aList.animes;
+    animes = animes + aList.animes;
   }
 }
 

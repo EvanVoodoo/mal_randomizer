@@ -6,16 +6,13 @@ import 'dart:math';
 import "./anime_list_view.dart";
 import './filters_view.dart';
 import 'anime_view.dart';
+import 'custom_appbar.dart';
+import 'custom_colors.dart';
+import 'screens/filter_screen.dart';
 
 void main() {
   runApp(const MalPicker());
 }
-
-List<Color> colorPalette = <Color>[
-  const Color.fromRGBO(48, 84, 164, 1.0),
-  const Color.fromRGBO(148, 181, 252, 1.0),
-  const Color.fromRGBO(23, 40, 79, 1.0),
-];
 
 class MalPicker extends StatelessWidget {
   const MalPicker({Key? key}) : super(key: key);
@@ -116,57 +113,73 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: colorPalette[0],
-          title: const Text(
-            " MAL Randomizer",
-            style: TextStyle(
-              fontSize: 26,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: "Random Anime"),
-              Tab(text: "Filters"),
-            ],
-          ),
-        ),
-        body: TabBarView(
+    return Scaffold(
+      appBar: CustomAppBar(
+        backgroundColor: colorPalette[0],
+        title: "MAL Randomizer",
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 489.4,
-                    child: Center(
-                      child: AnimeListView(animeList),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 9),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorPalette[0],
-                      ),
-                      onPressed: () {
-                        print(fetchAnimeList(AnimeList()).then((result) {
-                          print(result.animes);
-                          animeList = result;
-                        }));
-                      },
-                      child: const Text("Randomize"),
-                    ),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: SizedBox(
+                height: 533.4,
+                child: AnimeListView(animeList),
               ),
             ),
-            filterView,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  //padding: const EdgeInsets.symmetric(vertical: 9),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette[0],
+                    ),
+                    onPressed: () {
+                      print(fetchAnimeList(AnimeList()).then((result) {
+                        print(result.animes);
+                        animeList = result;
+                      }));
+                    },
+                    child: const SizedBox(
+                      width: 71.0,
+                      child: Text(
+                        "Randomize",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  //padding: const EdgeInsets.symmetric(vertical: 9),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette[0],
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterScreen(
+                            filterView: filterView,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const SizedBox(
+                      width: 71.0,
+                      child: Text(
+                        "Filters",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
