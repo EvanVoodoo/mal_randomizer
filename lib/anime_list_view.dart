@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './anime_view.dart';
+import 'anime_view.dart';
 
 class AnimeList {
   List<Anime> animes = [];
