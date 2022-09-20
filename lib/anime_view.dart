@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Anime {
-  final int id;
-  final String title;
-  final String mainPic;
-  final List<dynamic> genres;
-  final String rating;
+  late int id;
+  late String title;
+  late String mainPic;
+  late List<dynamic> genres;
+  late String rating;
 
   Anime({
     required this.id,
@@ -14,6 +14,8 @@ class Anime {
     required this.genres,
     required this.rating,
   });
+
+  Anime.empty();
 
   List<String> get getGenres {
     List<String> list = [];
