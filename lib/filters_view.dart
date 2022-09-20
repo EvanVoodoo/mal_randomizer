@@ -209,16 +209,15 @@ class FilterView extends StatefulWidget {
   }
 
   @override
-  State<FilterView> createState() => _FilterViewState(this);
+  State<FilterView> createState() => _FilterViewState();
 }
 
 class _FilterViewState extends State<FilterView> {
-  FilterView filterView;
-
-  _FilterViewState(this.filterView);
+  _FilterViewState();
 
   @override
   Widget build(BuildContext context) {
+    FilterView filterView = widget;
     return ListView(
       children: [
         Column(

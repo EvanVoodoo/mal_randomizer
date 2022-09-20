@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mal_picker/screens/anime_popout_screen.dart';
 
 class Anime {
   late int id;
@@ -60,11 +61,26 @@ class AnimeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: SizedBox(
-                  height: 120,
-                  child: Image.network(anime.mainPic),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnimePopOutScreen(anime: anime),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.all(0.0),
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: SizedBox(
+                    height: 120,
+                    child: Image.network(anime.mainPic),
+                  ),
                 ),
               ),
             ],
