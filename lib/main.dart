@@ -22,7 +22,7 @@ class MalPicker extends StatelessWidget {
     return MaterialApp(
       title: "MAL Randomizer",
       theme: ThemeData(
-        primaryColor: colorPalette[0], //const Color.fromRGBO(48, 84, 164, 1),
+        primaryColor: colorPalette[0],
         indicatorColor: colorPalette[1],
       ),
       home: const Homepage("MAL Randomizer Homepage"),
@@ -43,19 +43,16 @@ AnimeList animeList = AnimeList();
 FilterView filterView = FilterView();
 
 class _HomepageState extends State<Homepage> {
-  Future<AnimeList> fetchAnimeList(AnimeList originList) async {
+  Future<AnimeList> fetchAnimeList(int offset, String q) async {
     List<String> genres = filterView.activeGenreFilters;
     List<String> ratings = filterView.activeRatingFilters;
     bool nsfw = false;
     if (ratings.contains("rx")) nsfw = true;
 
-    Random rnd = Random();
     AnimeList aList = AnimeList();
-    aList.merge(originList);
-    String q = nouns.elementAt(rnd.nextInt(2537));
     final response = await http.get(
       Uri.parse(
-          'https://api.myanimelist.net/v2/anime?q=$q&nsfw=$nsfw&fields=id,title,main_picture,genres,rating'),
+          'https://api.myanimelist.net/v2/anime?offset=$offset&q=$q&nsfw=$nsfw&fields=id,title,main_picture,genres,rating'),
       headers: <String, String>{
         'X-MAL-CLIENT-ID': "564c1c4a446e35f7ffd0e46898a7dc43"
       },
@@ -99,13 +96,19 @@ class _HomepageState extends State<Homepage> {
     } else if (response.statusCode == 404 || aList.animes.isEmpty) {
       print(
           "Query  $q  gave no results, searching again. ${response.statusCode}");
-      return fetchAnimeList(originList);
+      Random rnd = Random();
+      String q2 = nouns.elementAt(rnd.nextInt(2537));
+      return fetchAnimeList(0, q2);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load anime list: ${response.statusCode}');
     }
-    // if (aList.animes.length < 10) return fetchAnimeList(aList);
+    if (aList.animes.length < 10 && offset < 90) {
+      fetchAnimeList(offset + 10, q).then((result) {
+        aList.merge(result);
+      });
+    }
 
     setState(() {});
     return aList;
@@ -132,49 +135,48 @@ class _HomepageState extends State<Homepage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  //padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPalette[0],
-                    ),
-                    onPressed: () {
-                      print(fetchAnimeList(AnimeList()).then((result) {
-                        print(result.animes);
-                        animeList = result;
-                      }));
-                    },
-                    child: const SizedBox(
-                      width: 71.0,
-                      child: Text(
-                        "Randomize",
-                        textAlign: TextAlign.center,
-                      ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorPalette[0],
+                  ),
+                  onPressed: () {
+                    Random rnd = Random();
+                    String q = nouns.elementAt(rnd.nextInt(2537));
+                    //print(
+                    fetchAnimeList(0, q).then((result) {
+                      //print(result.animes);
+                      animeList = result;
+                    }
+                    //)
+                    );
+                  },
+                  child: const SizedBox(
+                    width: 71.0,
+                    child: Text(
+                      "Randomize",
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                Container(
-                  //padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPalette[0],
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterScreen(
-                            filterView: filterView,
-                          ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorPalette[0],
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterScreen(
+                          filterView: filterView,
                         ),
-                      );
-                    },
-                    child: const SizedBox(
-                      width: 71.0,
-                      child: Text(
-                        "Filters",
-                        textAlign: TextAlign.center,
                       ),
+                    );
+                  },
+                  child: const SizedBox(
+                    width: 71.0,
+                    child: Text(
+                      "Filters",
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

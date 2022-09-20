@@ -35,13 +35,24 @@ class Node {
   });
 
   Anime toAnime(anime) {
-    return Anime(
-      id: anime["id"],
-      title: anime["title"],
-      mainPic: anime["main_picture"]["medium"],
-      genres: anime["genres"],
-      rating: anime["rating"],
-    );
+    Anime result = Anime.empty();
+      result.id = anime["id"];
+      result.title = anime["title"];
+      result.mainPic = anime["main_picture"]["medium"];
+    if (anime["rating"] == null && anime["genres"] == null) {
+      result.genres = ["Data not found."];
+      result.rating = "Data not found.";
+    } else if (anime["rating"] == null) {
+      result.genres = anime["genres"];
+      result.rating = "Data not found.";
+    } else if (anime["genres"] == null) {
+      result.genres = ["Data not found."];
+      result.rating = anime["rating"];
+    } else {
+      result.genres = anime["genres"];
+      result.rating = anime["rating"];
+    }
+    return result;
   }
 }
 
