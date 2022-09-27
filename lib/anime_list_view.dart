@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'anime_view.dart';
+import 'node.dart';
 
 class AnimeList {
   List<Anime> animes = [];
@@ -24,35 +25,6 @@ class AnimeList {
 
   void merge(AnimeList aList) {
     animes = animes + aList.animes;
-  }
-}
-
-class Node {
-  final Map<String, dynamic> anime;
-
-  Node({
-    required this.anime,
-  });
-
-  Anime toAnime(anime) {
-    Anime result = Anime.empty();
-      result.id = anime["id"];
-      result.title = anime["title"];
-      result.mainPic = anime["main_picture"]["medium"];
-    if (anime["rating"] == null && anime["genres"] == null) {
-      result.genres = ["Data not found."];
-      result.rating = "Data not found.";
-    } else if (anime["rating"] == null) {
-      result.genres = anime["genres"];
-      result.rating = "Data not found.";
-    } else if (anime["genres"] == null) {
-      result.genres = ["Data not found."];
-      result.rating = anime["rating"];
-    } else {
-      result.genres = anime["genres"];
-      result.rating = anime["rating"];
-    }
-    return result;
   }
 }
 
