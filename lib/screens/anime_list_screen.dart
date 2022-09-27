@@ -96,68 +96,70 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
         backgroundColor: colorPalette[0],
         title: "MAL Randomizer",
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: SizedBox(
-                height: 533.4,
-                child: AnimeListView(animeList),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: SizedBox(
+                  height: 533.4,
+                  child: AnimeListView(animeList),
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colorPalette[0],
-                  ),
-                  onPressed: () {
-                    Random rnd = Random();
-                    String q = nouns.elementAt(rnd.nextInt(2537));
-                    //print(
-                    fetchAnimeList(0, q).then((result) {
-                      //print(result.animes);
-                      animeList = result;
-                    }
-                      //)
-                    );
-                  },
-                  child: const SizedBox(
-                    width: 71.0,
-                    child: Text(
-                      "Randomize",
-                      textAlign: TextAlign.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette[0],
                     ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colorPalette[0],
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FilterScreen(
-                          filterView: filterView,
-                        ),
+                    onPressed: () {
+                      Random rnd = Random();
+                      String q = nouns.elementAt(rnd.nextInt(2537));
+                      //print(
+                      fetchAnimeList(0, q).then((result) {
+                        //print(result.animes);
+                        animeList = result;
+                      }
+                        //)
+                      );
+                    },
+                    child: const SizedBox(
+                      width: 71.0,
+                      child: Text(
+                        "Randomize",
+                        textAlign: TextAlign.center,
                       ),
-                    );
-                  },
-                  child: const SizedBox(
-                    width: 71.0,
-                    child: Text(
-                      "Filters",
-                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette[0],
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterScreen(
+                            filterView: filterView,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const SizedBox(
+                      width: 71.0,
+                      child: Text(
+                        "Filters",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

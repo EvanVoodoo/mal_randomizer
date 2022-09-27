@@ -15,8 +15,10 @@ class FilterScreen extends StatelessWidget {
         backgroundColor: colorPalette[2],
         title: "Filters",
       ),
-      body: Center(
-        child: filterView,
+      body: SafeArea(
+        child: Center(
+          child: filterView,
+        ),
       ),
     );
   }
