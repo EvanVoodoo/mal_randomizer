@@ -21,18 +21,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: backgroundColor,
-      title: Text(
-        title,
-        overflow: TextOverflow.fade,
-        softWrap: true,
-        maxLines: 2,
-        style: TextStyle(
-          fontSize: font,
-          color: Colors.white,
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: const EdgeInsets.only(left: 56.0, right: 16.0, bottom: 20.0),
+        title: Text(
+          title,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: font,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
       ),
-      centerTitle: true,
       elevation: 2,
     );
   }

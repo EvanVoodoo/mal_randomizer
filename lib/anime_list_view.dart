@@ -38,35 +38,26 @@ class AnimeListView extends StatelessWidget {
     if (animeList.animes.isNotEmpty) {
       return Column(
         children: [
-          Expanded(
-            flex: 1,
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [
-                ...animeList.animes.map((anime) {
-                  return AnimeView(anime);
-                }).toList(),
-              ],
-            ),
-          ),
+          ...animeList.animes.map((anime) {
+            return AnimeView(anime);
+          }).toList(),
         ],
       );
     } else {
-      return ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: const [
-          Text(
-            "List currently empty.",
+      return const Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Text(
+            "Welcome to the MAL Randomizer!\n\n"
+            "Using this app you can get random a set of anime from the MAL database. "
+            "Just press the randomize button at the bottom left of the screen!\n"
+            "You can also filter the anime given by both genre and age rating!\n"
+            "To access that screen, just click the button at the bottom right of the screen!\n"
+            "If you want to see more details about an anime, press the anime's image on the left!\n",
             style: TextStyle(
-              fontSize: 32,
+              fontSize: 16,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      );
+            textAlign: TextAlign.left,
+          ));
     }
   }
 }

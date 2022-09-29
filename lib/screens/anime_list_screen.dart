@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../anime_list_view.dart';
 import '../anime_view.dart';
-import '../custom_appbar.dart';
 import '../custom_colors.dart';
+import '../custom_sliver_appbar.dart';
 import '../main.dart';
 import 'filter_screen.dart';
 
@@ -91,75 +91,69 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        backgroundColor: colorPalette[0],
-        title: "MAL Randomizer",
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: SizedBox(
-                  height: 533.4,
-                  child: AnimeListView(animeList),
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            CustomSliverAppBar(
+              backgroundColor: colorPalette[0],
+              title: "Mal Randomizer",
+            ),
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                while (index < 1) {
+                  return AnimeListView(animeList);
+                }
+              },
+            ))
+          ],
+        ),
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorPalette[0],
+              ),
+              onPressed: () {
+                Random rnd = Random();
+                String q = nouns.elementAt(rnd.nextInt(2537));
+                fetchAnimeList(0, q).then((result) {
+                  animeList = result;
+                });
+              },
+              child: const SizedBox(
+                width: 71.0,
+                child: Text(
+                  "Randomize",
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPalette[0],
-                    ),
-                    onPressed: () {
-                      Random rnd = Random();
-                      String q = nouns.elementAt(rnd.nextInt(2537));
-                      //print(
-                      fetchAnimeList(0, q).then((result) {
-                        //print(result.animes);
-                        animeList = result;
-                      }
-                        //)
-                      );
-                    },
-                    child: const SizedBox(
-                      width: 71.0,
-                      child: Text(
-                        "Randomize",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPalette[0],
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterScreen(
-                            filterView: filterView,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const SizedBox(
-                      width: 71.0,
-                      child: Text(
-                        "Filters",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorPalette[0],
               ),
-            ],
-          ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FilterScreen(
+                      filterView: filterView,
+                    ),
+                  ),
+                );
+              },
+              child: const SizedBox(
+                width: 71.0,
+                child: Text(
+                  "Filters",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

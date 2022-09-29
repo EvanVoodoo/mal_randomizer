@@ -10,13 +10,13 @@ class FilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        backgroundColor: colorPalette[2],
-        title: "Filters",
-      ),
-      body: SafeArea(
-        child: Center(
+    return SafeArea(
+      child: Scaffold(
+        appBar: CustomAppBar(
+          backgroundColor: colorPalette[2],
+          title: "Filters",
+        ),
+        body: Center(
           child: filterView,
         ),
       ),

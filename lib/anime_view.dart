@@ -100,7 +100,7 @@ class Anime {
 class AnimeView extends StatelessWidget {
   final Anime anime;
 
-  AnimeView(this.anime);
+  const AnimeView(this.anime, {super.key});
 
   @override
   Widget build(BuildContext context) {

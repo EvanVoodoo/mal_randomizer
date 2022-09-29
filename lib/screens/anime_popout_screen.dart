@@ -37,15 +37,15 @@ class _AnimePopOutScreenState extends State<AnimePopOutScreen> {
   Widget build(BuildContext context) {
     Anime anime = widget.anime;
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        backgroundColor: colorPalette[2],
-        title: anime.title,
-        size: 70.0,
-        font: 20.0,
-      ),
-      body: SafeArea(
-        child: SizedBox(
+    return SafeArea(
+      child: Scaffold(
+        appBar: CustomAppBar(
+          backgroundColor: colorPalette[2],
+          title: anime.title,
+          size: 70.0,
+          //font: 20.0,
+        ),
+        body: SizedBox(
           height: MediaQuery.of(context).size.height - 94.0,
           child: Column(
             children: [

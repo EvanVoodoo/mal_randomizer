@@ -37,8 +37,6 @@ AnimeList animeList = AnimeList();
 FilterView filterView = FilterView();
 
 class _HomepageState extends State<Homepage> {
-
-
   @override
   Widget build(BuildContext context) {
     return const AnimeListScreen();
