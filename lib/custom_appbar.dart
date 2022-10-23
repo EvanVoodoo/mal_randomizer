@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.backgroundColor,
     required this.title,
     this.size = 54.0,
-    this.font = 26.0,
+    this.font = 24.0,
   }) : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(left: 56.0, right: 16.0, bottom: 20.0),
+        titlePadding: const EdgeInsets.only(left: 56.0, right: 16.0, bottom: 16.0),
         title: Text(
           title,
           overflow: TextOverflow.ellipsis,
